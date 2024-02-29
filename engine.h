@@ -36,7 +36,6 @@ class GameField {
 	friend class Snake;
 protected:
 	int** field = nullptr;
-	int score = 0;
 public:
 	GameField();
 	GameField(const GameField& F) = delete;
@@ -44,8 +43,6 @@ public:
 
 	GameField& operator=(const GameField& F) = delete;
 
-	int getScore() const;
 	int getCell(int i, int j) const;
-
 	void spawnApple();
 };

@@ -1,12 +1,8 @@
-#include "libs.h"
-
 #include "engine.h"
 #include "screen.h"
 #include "controller.h"
 
 int main() {
-
-	srand(time(0));
 
 	GameField Field;
 	GameScreen Screen(Field);
@@ -24,9 +20,7 @@ int main() {
 
 		Serpent.setDirection(control(Serpent));
 		if (Serpent.move(Field)) break;
-		Sleep(TURN_TIME);
 	}
 	Screen.gameOver();
-	Sleep(3000);
 	return 0;
 }

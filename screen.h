@@ -5,6 +5,7 @@
 class GameScreen {
 private:
 	char* output_buffer = nullptr;
+	int game_start_time = 0;
 	int score = 0;
 public:
 

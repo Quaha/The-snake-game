@@ -1,10 +1,11 @@
 #include "libs.h"
+#include "engine.h"
 
 #include "screen.h"
-#include "engine.h"
 
 GameScreen::GameScreen(const GameField& F) {
 	output_buffer = new char[N * (M + 1)];
+	game_start_time = time(0);
 	update(F);
 }
 
@@ -13,7 +14,7 @@ GameScreen::~GameScreen() {
 }
 
 void GameScreen::update(const GameField& F) {
-	score = F.getScore();
+	score = 0;
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
 			if (F.getCell(i, j) == FREE_SPACE_CODE) {
@@ -21,6 +22,7 @@ void GameScreen::update(const GameField& F) {
 			}
 			if (F.getCell(i, j) == SNAKE_CODE) {
 				output_buffer[i * (M + 1) + j] = SNAKE_SYMBOL;
+				score++;
 			}
 			if (F.getCell(i, j) == HEAD_CODE) {
 				output_buffer[i * (M + 1) + j] = HEAD_SYMBOL;
@@ -42,11 +44,14 @@ void GameScreen::show() const{
 	SetConsoleCursorInfo(ConsoleObj, &structCursorInfo);
 	std::cout.flush();
 	SetConsoleCursorPosition(ConsoleObj, {0, 0});
+
 	std::cout << output_buffer << "\n";
 	std::cout << "Use WASD to change direction.\n";
 	std::cout << "Score: " << score << '\n';
+	std::cout << "Time: " << time(0) - game_start_time << '\n';
 }
 
 void GameScreen::gameOver() const {
 	std::cout << "GameOver!\n";
+	Sleep(3000);
 }

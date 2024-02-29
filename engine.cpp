@@ -10,8 +10,8 @@ Snake::Snake() {
 	if (SNAKE_START_Y < 0 || SNAKE_START_Y >= N) {
 		throw "The wrong y coordinate of the beginning of the snake!";
 	}
-	(*Head).x = SNAKE_START_X;
-	(*Head).y = SNAKE_START_Y;
+	Head->x = SNAKE_START_X;
+	Head->y = SNAKE_START_Y;
 	Tail = Head;
 }
 
@@ -36,14 +36,15 @@ void Snake::setDirection(char C) {
 }
 
 void Snake::spawn(GameField &F) {
-	int x = (*this).Head->x;
-	int y = (*this).Head->y;
+	int x = this->Head->x;
+	int y = this->Head->y;
 	F.field[y][x] = HEAD_CODE;
 }
 
 int Snake::move(GameField& F) {
-	int x = (*this).Head->x;
-	int y = (*this).Head->y;
+	Sleep(TURN_TIME);
+	int x = this->Head->x;
+	int y = this->Head->y;
 
 	F.field[y][x] = SNAKE_CODE;
 
@@ -69,16 +70,13 @@ int Snake::move(GameField& F) {
 	Head = NewHead;
 
 	if (F.field[y][x] == APPLE_CODE) {
-		F.score++;
 		F.field[y][x] = HEAD_CODE;
 		F.spawnApple();
 	}
 	else {
 		if (F.field[y][x] == SNAKE_CODE && !(y == Tail->y && x == Tail->x)) return 1;
 		F.field[y][x] = HEAD_CODE;
-		int xt = Tail->x;
-		int yt = Tail->y;
-		F.field[yt][xt] = FREE_SPACE_CODE;
+		F.field[Tail->y][Tail->x] = FREE_SPACE_CODE;
 		SnakeNode* CurrTail = Tail;
 		Tail = Tail->next;
 		delete CurrTail;
@@ -87,6 +85,7 @@ int Snake::move(GameField& F) {
 }
 
 GameField::GameField() {
+	srand(time(0));
 	field = new int*[N];
 	field[0] = new int[N * M];
 	for (int i = 0; i < N; i++) {
@@ -107,10 +106,6 @@ GameField::~GameField() {
 	delete[] field;
 }
 
-int GameField::getScore() const {
-	return score;
-}
-
 int GameField::getCell(int i, int j) const {
 	return field[i][j];
 }
@@ -124,13 +119,13 @@ void GameField::spawnApple() {
 			}
 		}
 	}
-	int V = rand() % cnt + 1;
+	int num_of_cell_with_apple = rand() % cnt + 1;
 	
 	for (int i = 0, cnt = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
 			if (field[i][j] == FREE_SPACE_CODE) {
 				cnt++;
-				if (cnt == V) {
+				if (cnt == num_of_cell_with_apple) {
 					field[i][j] = APPLE_CODE;
 					return;
 				}

@@ -6,10 +6,9 @@
 void startWaiting() {
 	bool flag = true;
 	while (flag) {
-		flag &= !GetAsyncKeyState('W');
-		flag &= !GetAsyncKeyState('A');
-		flag &= !GetAsyncKeyState('S');
-		flag &= !GetAsyncKeyState('D');
+		for (int i = 0; i < 256; i++) {
+			flag &= !GetAsyncKeyState(i);
+		}
 	}
 }
 
